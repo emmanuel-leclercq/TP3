@@ -13,6 +13,11 @@ private:
 
 public:
     int size() const { return n; };
-    vector<int> extend(int n) const { return v; };
-    
+    vector<int> extend(int m) const { 
+        vector<int> v2(m-n);
+        for (int i=0;i<m-n){
+            v2[i]=i+n;
+        }
+        return v2; };
+
 }
