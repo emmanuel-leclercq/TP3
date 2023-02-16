@@ -135,7 +135,13 @@ public:
     int order() const
     {
         list<Cycle> l = cycles();
-        return accumulate(l.begin(), l.end(), 1, [](Cycle a, Cycle b) { return lcm(a, b); }); 
+        vector<int> orders;
+        for (auto& c : l)
+        {
+            orders.push_back(c.order());
+        }
+        int lcm = std::accumulate(orders.begin(), orders.end(), 1, std::lcm<int, int>);
+        return lcm;
     };
 
     // operator
