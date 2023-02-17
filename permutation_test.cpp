@@ -1,11 +1,9 @@
-#include </workspaces/TP3/permutations.hpp>
+#include "/workspaces/TP3/permutation.hpp"
 #include <iostream>
 #include <fstream>
 #include <algorithm> // pour for_each et max_element
 #include <random>    // pour le générateur std::mt19937
 // donc compiler en -std=c++11
-
-using namespace std;
 
 int main()
 {
@@ -15,8 +13,8 @@ int main()
     Permutation b(6); // identite
     for (int i = 0; i <= 6; ++i)
     {
-        cout << "a^" << i << endl
-             << b << endl;
+        cout << "a^" << i << endl;
+        cout << b << endl;
         b = b * a;
     }
     list<int> fp = a.fixed_points();
@@ -49,6 +47,6 @@ int main()
     }
     cout << "La proportion de dérangements est environ "
          << nb_derang / double(nb_echant) << endl;
-    
+
     return 0;
 }
