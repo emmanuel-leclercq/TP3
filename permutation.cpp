@@ -1,9 +1,9 @@
-#include </workspaces/TP3/permutation.hpp>
+#include "/workspaces/TP3/permutation.hpp"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <random>
-#include </workspaces/TP3/arithm.hpp>
+#include "/workspaces/TP3/arithm.hpp"
 #include <unordered_set>
 
 using namespace std;
@@ -144,4 +144,3 @@ int Permutation::order() const
     return lcm_list(orders);
 };
 
-int main(){return 0;}

@@ -20,4 +20,3 @@ int lcm_list(std::list<int> l){
     return std::accumulate(l.begin(), l.end(), 1, lcm);
 }
 
-int main(){return 0;}
