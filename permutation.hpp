@@ -27,12 +27,12 @@ public:
     {
         return (c1.order() < c2.order());
     };
-    friend ostream operator<<(ostream &os, const Cycle &c)
+    friend ostream &operator<<(ostream &os, const Cycle &c)
     {
-        for (auto i : c.elem)
-        {
-            os << "(" << i << ")";
-        }
+        auto affiche = [](int x)
+        { cout << x << " "; };
+        for_each(c.elem.begin(), c.elem.end(), affiche);
+        return os;
     };
 };
 
@@ -46,7 +46,7 @@ private:
     vector<int> images;
 
     // mutateur
-    const int &operator[](int &i) { return images[i]; };
+    int &operator[](int &i) { return images[i]; };
 
 public:
     // constructeurs
@@ -66,8 +66,8 @@ public:
     int order() const;
 
     // operators
-    int operator[](int &i) const { return images[i]; };
+    int operator[](int i) const;
     friend ostream &operator<<(ostream &, const Permutation &);
-    Permutation operator*(const Permutation &);
+    friend Permutation operator*(const Permutation &, const Permutation &);
 };
 #endif

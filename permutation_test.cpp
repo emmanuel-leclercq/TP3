@@ -1,9 +1,11 @@
 #include "/workspaces/TP3/permutation.hpp"
+#include "/workspaces/TP3/arithm.hpp"
 #include <iostream>
 #include <fstream>
 #include <algorithm> // pour for_each et max_element
 #include <random>    // pour le générateur std::mt19937
 // donc compiler en -std=c++11
+#include <unordered_set>
 
 int main()
 {
@@ -18,10 +20,18 @@ int main()
         b = b * a;
     }
     list<int> fp = a.fixed_points();
+    cout << "Les points fixes de a sont : "<<endl;
     auto affiche = [](int x)
     { cout << x << " "; };
     for_each(fp.begin(), fp.end(), affiche);
     cout << "\n";
+    cout<<endl;
+    /*Permutation id(6);
+    list<Cycle> c = id.cycles();
+    auto show=[](Cycle c)
+    {cout<<c<<endl;};
+    for_each(c.begin(),c.end(),show);*/
+    
     // Deuxieme partie
     ifstream fichier_s("./file_s.dat");
     ifstream fichier_t("./file_t.dat");
@@ -29,24 +39,25 @@ int main()
     Permutation t(fichier_t);
     fichier_s.close();
     fichier_t.close();
-
     Permutation u = s * t.inverse();
     cout << "L'ordre de la permutation s*t^-1 est égal à "
          << u.order() << endl;
+    
     list<Cycle> l = u.cycles();
-    cout << "Cette permutation a " << l.size() << "cycles, dont le plus grand a pour longueur " << (*max_element(l.begin(), l.end())).order() << endl;
+    cout << "Cette permutation a " << l.size() << " cycles, dont le plus grand a pour longueur " << (*max_element(l.begin(), l.end())).order() << endl;
     // attention, cela utilise < sur des Cycle !
     //  Troisieme partie
     mt19937 g;
     unsigned n = 100;
     unsigned nb_echant = 10000;
     unsigned nb_derang = 0;
+    Permutation test(n,g);
     for (unsigned i = 0; i < nb_echant; ++i)
     {
         nb_derang += Permutation(n, g).is_derangement();
     }
     cout << "La proportion de dérangements est environ "
          << nb_derang / double(nb_echant) << endl;
-
+    
     return 0;
 }

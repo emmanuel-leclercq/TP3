@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <random>
 #include "/workspaces/TP3/arithm.hpp"
-#include <unordered_set>
+#include <set>
 
 using namespace std;
 
@@ -13,14 +13,17 @@ Permutation::Permutation(int m) : n(m), images(m)
 {
     iota(images.begin(), images.end(), 0);
 };
-Permutation::Permutation(int m, mt19937 &g)
+Permutation::Permutation(int m, mt19937 &g): n(m), images(m)
 {
-    n = m;
     for (int i = 0; i < n; i++)
     {
         images[i] = i;
     }
-    shuffle(images.begin(), images.end(), g);
+for (int i = n - 1; i > 0; --i) {
+        std::uniform_int_distribution<int> dis(0, i);
+        int j = dis(g);
+        std::swap(images[i], images[j]);
+    }
 };
 Permutation::Permutation(ifstream &f)
 {
@@ -50,23 +53,21 @@ Permutation Permutation::extend(int m) const
     }
 }
 
-Permutation Permutation::operator*(const Permutation &p)
+int Permutation::operator[](int i) const
 {
-    Permutation prod;
-    if (n > p.size())
+    return images[i];
+}
+
+Permutation operator*(const Permutation &p1, const Permutation &p2)
+{
+    vector<int> v2(p1.size());
+    for (int i = 0; i < p1.size(); i++)
     {
-        prod = p.extend(n);
+        v2[i] = p1[p2[i]];
     }
-    if (n < p.size())
-    {
-        prod = extend(p.size());
-    }
-    for (int i = 0; i < prod.size(); i++)
-    {
-        prod.images[i] = images[p[i]];
-    }
-    return prod;
-}; // complexité O(max(n,p.size()))
+    return Permutation(v2);
+};
+// complexité O(max(n,p.size()))
 
 ostream &operator<<(ostream &os, const Permutation &p)
 {
@@ -75,6 +76,7 @@ ostream &operator<<(ostream &os, const Permutation &p)
     {
         os << p[i] << " ";
     }
+    return os;
 };
 
 list<int> Permutation::fixed_points() const
@@ -112,25 +114,30 @@ bool Permutation::is_derangement() const
 list<Cycle> Permutation::cycles() const
 {
     list<Cycle> L;
-    unordered_set<int> S;
+    set<int> S;
     for (int i = 0; i < n; i++)
     {
         S.insert(i);
     }
-    while (S.size() != 0)
+    while (S.size() > 0)
     {
         list<int> l2;
-        int i = *S.begin();
-        l2.push_back(i);
-        S.erase(i);
-        while (images[i] != l2.front())
+        int x = *S.begin();
+        l2.push_back(x);
+        S.erase(x);
+        while (images[x] != l2.front())
         {
-            i = images[i];
-            l2.push_back(i);
-            S.erase(i);
+            x = images[x];
+            l2.push_back(x);
+            S.erase(x);
         }
-        L.push_back(Cycle(l2));
+        // L.push_back(Cycle(l2));
+        if (l2.size() > 1)
+        {
+            L.push_back(Cycle(l2));
+        }
     }
+    return L;
 };
 
 int Permutation::order() const
@@ -143,4 +150,3 @@ int Permutation::order() const
     }
     return lcm_list(orders);
 };
-
