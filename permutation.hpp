@@ -69,5 +69,20 @@ public:
     int operator[](int i) const;
     friend ostream &operator<<(ostream &, const Permutation &);
     friend Permutation operator*(const Permutation &, const Permutation &);
+
+    // templates
+    template <typename T>
+    vector<T> permute(std::vector<T> &v) const
+    {
+
+        if (n <= v.size())
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                swap(v[i], v[images[i]]);
+            }
+        }
+        return v;
+    };
 };
 #endif
